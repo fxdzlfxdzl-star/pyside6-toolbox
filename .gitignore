@@ -1,0 +1,23 @@
+# 虚拟环境
+.venv/
+venv/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# PyCharm
+.idea/
+*.iml
+
+# 构建产物
+build/
+dist/
+*.spec
+pysidedeploy.spec
+
+# uic 生成物（按需保留，团队协作时一般不入库）
+# ui_*.py
+# resources_rc.py
