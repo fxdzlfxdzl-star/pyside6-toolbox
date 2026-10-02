@@ -41,10 +41,31 @@ python examples\01_hello_window.py
 pyside6-learning/
 ├── .venv/            # 虚拟环境（不要提交到 git）
 ├── examples/         # 每个知识点的最小可运行示例
+│   ├── 01_hello_window.py          # 最小窗口，验证环境
+│   ├── 02_migration_diffs.py       # PyQt5→PySide6 十项差异，可交互对照 + --selftest
+│   └── 03_designer_workflow.py     # Designer 两条路线（编译式 / 运行时加载）
+├── ui/               # Qt Designer 的 .ui 与编译产物
+│   ├── main.ui                     # 用 pyside6-designer 打开改
+│   └── ui_main.py                  # pyside6-uic 生成，不要手改
 ├── notes/            # 学习笔记
-│   └── 00-learning-path.md   # 六周学习路线 + PyQt→PySide6 迁移对照表 + 面试考点
+│   ├── 00-learning-path.md         # 六周路线 + 迁移对照表 + 面试考点
+│   ├── 01-github-access-and-account.md  # 网络与账号排障记录
+│   └── 02-week1-checklist.md       # 第 1 周逐日执行清单 ← 从这里开始
 └── assets/           # 图标、qrc 资源等
 ```
+
+## 快速开始
+
+三个示例都能跑，且有自检模式（不开窗口，直接验证 API）：
+
+```bash
+python examples/02_migration_diffs.py --selftest
+python examples/03_designer_workflow.py --selftest
+```
+
+两条都应输出「结果：全部通过」。
+
+**下一步看 `notes/02-week1-checklist.md`**（第 1 周逐日任务）。
 
 ## 学习方式
 

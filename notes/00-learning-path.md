@@ -59,13 +59,16 @@ class Worker(QObject):
 
 ### 1.2 最容易被坑的 10 个点
 
-1. **`exec_()` → `exec()`**：PySide6 只有 `exec()`。`app.exec()`、`dialog.exec()` 都要改。
-2. **`QAction` / `QShortcut` 从 QtWidgets 搬到 QtGui**（Qt6 的统一改动，两个绑定都一样）。
-3. **枚举写法**：PySide6 两种都能用（`Qt.AlignCenter` 和 `Qt.AlignmentFlag.AlignCenter`），但**写新代码一律用全限定名**，面试时更专业。
-4. **`QRegExp` 已死** → 用 `QRegularExpression`。
-5. **`QDesktopWidget` 已删除** → 用 `QScreen` / `QGuiApplication.screens()`。
-6. **`QVariant` 不再暴露**，Python 侧直接传原生类型。
-7. **`QFontMetrics.width()` → `horizontalAdvance()`**。
+> 以下每条都用 `examples/02_migration_diffs.py --selftest` 实测校验过（PySide6 6.11.2 / Python 3.12.10）。
+> 结论标注：[已移除] = import 直接报错；[仅弃用] = 还能跑但不该写新代码。
+
+1. **`exec_()` → `exec()`【仅弃用，非移除】**：PySide6 **保留了 `exec_` 作为兼容别名**（与 `exec` 不是同一个对象），PyQt5 老代码能直接跑。但新代码一律写 `app.exec()` / `dialog.exec()` —— 面试时说"exec_ 被移除了"会被抓。
+2. **`QAction` / `QShortcut` 从 QtWidgets 搬到 QtGui**【已实测确认】。这是 Qt6 层面的改动，PyQt6 也一样。
+3. **枚举写法**：PySide6 两种都能用（`Qt.AlignCenter` 与 `Qt.AlignmentFlag.AlignCenter` **数值相等**），但**写新代码一律用全限定名**，面试时更专业。
+4. **`QRegExp` → `QRegularExpression`**【已移除】，import 直接 ImportError。
+5. **`QDesktopWidget` → `QScreen` / `QGuiApplication.screens()`**【已移除】。
+6. **`QVariant`**【已移除】，Python 侧直接传原生类型。
+7. **`QFontMetrics.width()` → `horizontalAdvance()`**【已移除】，`hasattr(fm, 'width')` 为 False。
 8. **`unicode` 相关 API 全部消失**，Python 3 只有 `str`。
 9. **信号重载**写法变了：`Signal(int)` 定义，连接时靠参数签名或 `@Slot(int)` 区分。
 10. **`uic` 模块路径变了**：`PySide6.QtUiTools` + `QUiLoader`；命令行是 `pyside6-uic`。
@@ -85,10 +88,12 @@ pyside6-lupdate / pyside6-lrelease    # 国际化
 ## 2. 六周计划（每周 5 天 × 3~5 小时）
 
 ### 第 1 周：找回手感 + 吃透差异
+- [ ] 跑 `examples/02_migration_diffs.py`（窗口模式 + `--selftest` 模式各跑一遍）。
+- [ ] 逐条对照 `notes/02-week1-checklist.md`，把 10 个差异点各写一个自己的最小示例。
 - [ ] 用 PySide6 重写一个你以前做过的 PyQt 界面（哪怕简单）。
-- [ ] 手抄上面的迁移对照表，每个点写一个最小可运行示例。
 - [ ] 熟悉 `pyside6-designer` + `pyside6-uic` 的完整流程。
 - **产出**：一个能用 Designer 改的 `.ui` + `.py` 组合项目。
+- **详细任务拆解见 `notes/02-week1-checklist.md`。**
 
 ### 第 2 周：Qt 核心机制补课（面试重灾区）
 - [ ] **信号槽底层**：直连 / 队列连接 / 自动连接的差异，跨线程为什么必须 QueuedConnection。
